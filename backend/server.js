@@ -10,7 +10,10 @@ app.use(express.json({ limit: "3mb" }));
 
 const server = http.createServer(app);
 const io = new Server(server, {
-  cors: { origin:"http://localhost:5173", methods:["GET","POST"] },
+  cors: {
+    origin: true,
+    methods: ["GET", "POST"],
+  },
   maxHttpBufferSize: 3e6,
 });
 
@@ -142,4 +145,8 @@ setInterval(()=>{
   for(const [id,room] of rooms) if(room.emptySince&&now-room.emptySince>30*60*1000) rooms.delete(id);
 },60000);
 
-server.listen(5000,()=>console.log("StreamSphere backend started at http://localhost:5000"));
+const PORT = process.env.PORT || 5000;
+
+server.listen(PORT, () => {
+  console.log(`StreamSphere backend started on port ${PORT}`);
+});
